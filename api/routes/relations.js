@@ -3,6 +3,13 @@ const router = express.Router();
 const db = require('../db');
 
 
+/**
+ * 
+ * INNER JOIN QUERY
+ * https://dba.stackexchange.com/questions/151904/mapping-many-to-many-relationship?utm_medium=organic&utm_source=google_rich_qa&utm_campaign=google_rich_qa
+ * 
+ */
+
 
 router.get('/child', (req, res, next) => {
     let sql = `
@@ -17,12 +24,6 @@ router.get('/child', (req, res, next) => {
         ON UPDATE CASCADE
     `;
 
-    /**
-     * 
-
-     */
-
-    // Update Table COLUMNS ==> ALTER TABLE (parents) ADD COLUMN (age) INT(11)
     db.query(sql, (err, result) => {
         if (err) throw err;
         res.json({
