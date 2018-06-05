@@ -101,6 +101,30 @@ router.get('/getChildren/:lineNumber', (req, res, next) => {
 })
 
 
+router.get('/:code', (req, res, next) => {
+    let code = req.params.code;
+
+    let sql = `
+        SELECT * FROM matrons WHERE code=${code}
+    `;
+    db.query(sql, (err, result) => {
+        if (err) throw err;
+        if (result.length >= 1) {
+            res.status(200).json({
+                success: true,
+                isMatrons: true,                
+                matrons: result[0]
+            });
+        } else {
+            res.status(500).json({
+                success: false,
+                message: 'No Matrons With this code'
+            })
+        }
+    })
+})
+
+
 
 
 

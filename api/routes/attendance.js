@@ -27,13 +27,12 @@ router.get('/createTable', (req, res, next) => {
 
 router.post('/create', (req, res, next) => {
     let children = req.body.children;
-    // [childId,checked,line,confirmed,time]
     let sql = `
-        INSERT INTO attendance(childId,checked,line,confirmed,time) SET ?
+        INSERT INTO attendance(childId,checked,line,confirmed,time) VALUES ?
     `;
     db.query(sql, [children], (err, result) => {
         if (err) throw err;
-        if (result['affectedRows'] === 1) {
+        if (result['affectedRows'] >= 1) {
             res.status(200).json({
                 success: true,
                 message: 'Attendance Added Successfully!'

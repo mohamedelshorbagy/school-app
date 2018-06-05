@@ -74,17 +74,18 @@ router.get('/all', (req, res, next) => {
     })
 })
 
-router.get('/:id', (req, res, next) => {
-    let id = req.params.id;
+router.get('/:code', (req, res, next) => {
+    let code = req.params.code;
 
     let sql = `
-        SELECT * FROM parents WHERE id=${id} LIMIT 1
+        SELECT * FROM parents WHERE code=${code} LIMIT 1
     `;
     db.query(sql, (err, result) => {
         if (err) throw err;
         if (result.length >= 1) {
             res.status(200).json({
                 success: true,
+                isParent: true,
                 parent: result[0]
             });
         } else {

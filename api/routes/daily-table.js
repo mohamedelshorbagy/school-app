@@ -68,9 +68,9 @@ router.get('/getDailyTable/:childId/:day', (req, res, next) => {
     WHERE 
         daily.childId = ${req.params.childId} 
     AND 
-        daily.day = ${req.params.day} 
+        daily.day Like '%${req.params.day}%' 
     AND 
-        attendance.time = ${req.params.day}
+        attendance.time Like '%${req.params.day}%'
     `;
 
     db.query(sql, (err, result) => {
