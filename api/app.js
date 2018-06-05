@@ -38,10 +38,29 @@ db.connect((err) => {
  * 
  */
 
+const driverRoute = require('./routes/drivers');
 const parentRoute = require('./routes/parents');
+const matronsRoute = require('./routes/matrons');
+const supervisorRoute = require('./routes/supervisors');
+const childRoute = require('./routes/child');
+const attendanceRoute = require('./routes/attendance');
+const dailyRoute = require('./routes/daily-table');
+const busRoute = require('./routes/bus');
+const classRoute = require('./routes/class');
+const schoolRoute = require('./routes/school');
+const relations = require('./routes/relations');
 
-
+app.use('/api/drivers', driverRoute);
 app.use('/api/parents', parentRoute);
+app.use('/api/matrons', matronsRoute);
+app.use('/api/supervisors', supervisorRoute);
+app.use('/api/child', childRoute);
+app.use('/api/attendance', attendanceRoute);
+app.use('/api/daily-table', dailyRoute);
+app.use('/api/bus', busRoute);
+app.use('/api/class', classRoute);
+app.use('/api/school', schoolRoute);
+app.use('/api/relations', relations);
 
 /**
  * 

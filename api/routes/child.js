@@ -5,14 +5,16 @@ const db = require('../db');
 
 router.get('/createTable', (req, res, next) => {
     let sql = `
-    CREATE TABLE parents (
+    CREATE TABLE child (
         id int(11) AUTO_INCREMENT,
         name VARCHAR(255) NOT NULL,
-        code int(6) NOT NULL,
-        password VARCHAR(255) NOT NULL,
-        phone VARCHAR(11) NOT NULL,
-        lat FLOAT(10,6) NOT NULL,
-        lng FLOAT(10,6) NOT NULL,
+        classId int(11) NOT NULL,
+        line VARCHAR(255) NOT NULL,
+        grade VARCHAR(255) NOT NULL,
+        birthdate VARCHAR(255) NOT NULL,
+        age VARCHAR(255) NOT NULL,
+        photo VARCHAR(255) NOT NULL,
+        parentId int(11) NOT NULL,
         PRIMARY KEY (id)
     )`;
 

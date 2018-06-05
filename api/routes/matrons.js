@@ -3,18 +3,20 @@ const router = express.Router();
 const db = require('../db');
 
 
+
 router.get('/createTable', (req, res, next) => {
     let sql = `
-    CREATE TABLE parents (
+    CREATE TABLE matrons (
         id int(11) AUTO_INCREMENT,
-        name VARCHAR(255) NOT NULL,
-        code int(6) NOT NULL,
-        password VARCHAR(255) NOT NULL,
-        phone VARCHAR(11) NOT NULL,
-        lat FLOAT(10,6) NOT NULL,
-        lng FLOAT(10,6) NOT NULL,
+        name VARCHAR(255),
+        password VARCHAR(255),
+        code int(7),
+        phone VARCHAR(11),
+        line VARCHAR(255),
+        busId int(11),
         PRIMARY KEY (id)
     )`;
+
 
     // Update Table COLUMNS ==> ALTER TABLE (parents) ADD COLUMN (age) INT(11)
     db.query(sql, (err, result) => {
@@ -145,6 +147,17 @@ router.delete('/:id', (req, res, next) => {
         }
     })
 })
+
+
+
+
+
+
+
+
+
+
+
 
 
 
