@@ -24,12 +24,14 @@ DROP TABLE IF EXISTS `attendance`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `attendance` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `studentId` varchar(255) DEFAULT NULL,
+  `childId` int(11) DEFAULT NULL,
   `checked` int(1) DEFAULT NULL,
   `time` varchar(255) DEFAULT NULL,
   `line` varchar(255) DEFAULT NULL,
   `confirmed` int(1) DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `col_attendance_child_id` (`childId`),
+  CONSTRAINT `col_attendance_child_id` FOREIGN KEY (`childId`) REFERENCES `child` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -83,7 +85,11 @@ CREATE TABLE `child` (
   `age` varchar(255) NOT NULL,
   `photo` varchar(255) NOT NULL,
   `parentId` int(11) NOT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `col_child_parent_id` (`parentId`),
+  KEY `col_child_class_id` (`classId`),
+  CONSTRAINT `col_child_class_id` FOREIGN KEY (`classId`) REFERENCES `class` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `col_child_parent_id` FOREIGN KEY (`parentId`) REFERENCES `parents` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -135,7 +141,13 @@ CREATE TABLE `daily` (
   `arrived` varchar(255) NOT NULL,
   `dropped` varchar(255) NOT NULL,
   `day` varchar(255) NOT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `col_daily_child_id` (`childId`),
+  KEY `col_daily_matrons_id` (`matronId`),
+  KEY `col_daily_driver_id` (`driverId`),
+  CONSTRAINT `col_daily_child_id` FOREIGN KEY (`childId`) REFERENCES `child` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `col_daily_driver_id` FOREIGN KEY (`driverId`) REFERENCES `driver` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `col_daily_matrons_id` FOREIGN KEY (`matronId`) REFERENCES `matrons` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -166,7 +178,9 @@ CREATE TABLE `driver` (
   `phone` varchar(11) NOT NULL,
   `lat` float(10,6) NOT NULL,
   `lng` float(10,6) NOT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `col_driver_bus_id` (`busId`),
+  CONSTRAINT `col_driver_bus_id` FOREIGN KEY (`busId`) REFERENCES `bus` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -188,13 +202,15 @@ DROP TABLE IF EXISTS `matrons`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `matrons` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) NOT NULL,
-  `password` varchar(255) NOT NULL,
-  `code` int(7) NOT NULL,
-  `phone` varchar(11) NOT NULL,
-  `line` varchar(255) NOT NULL,
-  `bus` varchar(255) NOT NULL,
-  PRIMARY KEY (`id`)
+  `name` varchar(255) DEFAULT NULL,
+  `password` varchar(255) DEFAULT NULL,
+  `code` int(7) DEFAULT NULL,
+  `phone` varchar(11) DEFAULT NULL,
+  `line` varchar(255) DEFAULT NULL,
+  `busId` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `col_matron_bus_id` (`busId`),
+  CONSTRAINT `col_matron_bus_id` FOREIGN KEY (`busId`) REFERENCES `bus` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -303,4 +319,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-06-05  7:08:09
+-- Dump completed on 2018-06-05  9:19:36
