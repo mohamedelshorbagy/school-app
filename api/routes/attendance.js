@@ -26,21 +26,17 @@ router.get('/createTable', (req, res, next) => {
 
 
 router.post('/create', (req, res, next) => {
-    let parent = {
-        name: req.body.name,
-        email: req.body.email,
-        password: req.body.password,
-        phone: req.body.phone
-    }
+    let children = req.body.children;
+    // [childId,checked,line,confirmed,time]
     let sql = `
-        INSERT INTO parents SET ?
+        INSERT INTO attendance(childId,checked,line,confirmed,time) SET ?
     `;
-    db.query(sql, parent, (err, result) => {
+    db.query(sql, [children], (err, result) => {
         if (err) throw err;
         if (result['affectedRows'] === 1) {
             res.status(200).json({
                 success: true,
-                message: 'User Created Successfull!'
+                message: 'Attendance Added Successfully!'
             });
         } else {
             res.status(500).json({
@@ -52,8 +48,8 @@ router.post('/create', (req, res, next) => {
 })
 
 
-router.get('/all', (req, res, next) => {
-    let sql = 'SELECT * FROM parents';
+router.get('/getAttendance/:lineNumber/:day', (req, res, next) => {
+    let sql = `SELECT * FROM attendance WHERE line=${req.params.lineNumber} and time=${req.params.day}`;
 
     db.query(sql, (err, result) => {
         if (err) throw err;
@@ -61,7 +57,7 @@ router.get('/all', (req, res, next) => {
             res.status(200).json({
                 success: true,
                 count: result.length,
-                parents: result
+                children: result
             })
         } else {
             res.status(200).json({

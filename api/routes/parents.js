@@ -31,7 +31,8 @@ router.post('/create', (req, res, next) => {
         name: req.body.name,
         email: req.body.email,
         password: req.body.password,
-        phone: req.body.phone
+        phone: req.body.phone,
+        code: req.body.code
     }
     let sql = `
         INSERT INTO parents SET ?
@@ -85,6 +86,28 @@ router.get('/:id', (req, res, next) => {
             res.status(200).json({
                 success: true,
                 parent: result[0]
+            });
+        } else {
+            res.status(500).json({
+                success: false,
+                message: 'User Not Found'
+            })
+        }
+    })
+})
+
+router.get('/:id/children', (req, res, next) => {
+    let id = req.params.id;
+
+    let sql = `
+        SELECT * FROM child WHERE parentId=${id}
+    `;
+    db.query(sql, (err, result) => {
+        if (err) throw err;
+        if (result.length >= 1) {
+            res.status(200).json({
+                success: true,
+                children: result
             });
         } else {
             res.status(500).json({

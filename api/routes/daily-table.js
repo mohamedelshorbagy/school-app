@@ -53,8 +53,25 @@ router.post('/create', (req, res, next) => {
 })
 
 
-router.get('/all', (req, res, next) => {
-    let sql = 'SELECT * FROM parents';
+router.get('/getDailyTable/:childId/:day', (req, res, next) => {
+    let sql = `
+    SELECT child.name AS child , driver.name AS driver , matrons.name AS matrons, arrived , dropped , day , attendance.checked AS checked 
+    From daily 
+    INNER JOIN child 
+        ON daily.childId = child.id 
+    INNER JOIN driver 
+        ON daily.driverId = driver.id 
+    INNER JOIN matrons 
+        ON daily.matronId = matrons.id 
+    INNER JOIN attendance 
+        ON daily.childId = attendance.childId 
+    WHERE 
+        daily.childId = ${req.params.childId} 
+    AND 
+        daily.day = ${req.params.day} 
+    AND 
+        attendance.time = ${req.params.day}
+    `;
 
     db.query(sql, (err, result) => {
         if (err) throw err;
@@ -62,7 +79,7 @@ router.get('/all', (req, res, next) => {
             res.status(200).json({
                 success: true,
                 count: result.length,
-                parents: result
+                daily: result
             })
         } else {
             res.status(200).json({

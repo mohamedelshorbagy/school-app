@@ -31,9 +31,11 @@ router.get('/createTable', (req, res, next) => {
 router.post('/create', (req, res, next) => {
     let parent = {
         name: req.body.name,
-        email: req.body.email,
+        code: req.body.code,
         password: req.body.password,
-        phone: req.body.phone
+        phone: req.body.phone,
+        line: req.body.line,
+        busId: req.body.busId
     }
     let sql = `
         INSERT INTO parents SET ?
@@ -75,27 +77,31 @@ router.get('/all', (req, res, next) => {
     })
 })
 
-router.get('/:id', (req, res, next) => {
-    let id = req.params.id;
+
+router.get('/getChildren/:lineNumber', (req, res, next) => {
+    let lineNumber = req.params.lineNumber;
 
     let sql = `
-        SELECT * FROM parents WHERE id=${id} LIMIT 1
+        SELECT * FROM child WHERE line=${lineNumber}
     `;
     db.query(sql, (err, result) => {
         if (err) throw err;
         if (result.length >= 1) {
             res.status(200).json({
                 success: true,
-                parent: result[0]
+                children: result
             });
         } else {
             res.status(500).json({
                 success: false,
-                message: 'User Not Found'
+                message: 'No Children In this Line'
             })
         }
     })
 })
+
+
+
 
 
 router.patch('/:id', (req, res, next) => {
